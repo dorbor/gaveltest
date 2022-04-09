@@ -1,27 +1,26 @@
 import { Text, View, SafeAreaView,  Pressable, TextInput, Alert, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native'
 import React, {useState, useEffect } from 'react'
 import PhoneInput from 'react-native-phone-number-input'
-import { backgroundColor, color } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
+import Header from './Header'
+import { styles } from '../assets/styles'
 
 
- const PageOne = () =>  {
+ const PageOne = ({ navigation }) =>  {
+    //  PHONE NUMBER
      const [phone, setPhone] = useState('')
      const [modalVisible, setModalVisible] = useState(false); 
 
-     const onPressButton = () => {
-        Alert.alert('Welcome To GeeksForGeeks..')
-      }
+    //  navigate to page 2
+     const nextPage = () => {
+      //navigation.navigate('ReviewDetails');
+      setModalVisible(false)
+      navigation.push('PageTwo');
+    }
 
     return (
         <SafeAreaView style={styles.container}>
           
-           <View style={styles.header}>
-                <View style={styles.logo}>
-                  <Image style={styles.img} source={require('../assets/logo.png')} />
-                </View>
-
-                <View style={styles.headerRight}></View>
-           </View>
+        <Header />
         
         <View style={styles.welcome}>
           <Text style={styles.welcomeText}>Welcome to Gavel </Text>
@@ -43,97 +42,41 @@ import { backgroundColor, color } from 'react-native/Libraries/Components/View/R
         </View>
 
         <View style={styles.btnSection}>
-          <TouchableOpacity style={styles.btn} onPress={ () => {Alert.alert(phone)}}>
+          <TouchableOpacity style={styles.btn} onPress={() => setModalVisible(!modalVisible)}>
             <Text style={styles.btnText}>{'Continue'}</Text>
           </TouchableOpacity>
         </View>
-        {/* <Modal>
-                <Text>phone</Text>
-        </Modal> */}
+        
+
+        {/* model section */}
+        <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={{paddingBottom: 50}}>{phone}</Text>
+                  <View style={styles.modelBtnSection}>
+                      <TouchableOpacity
+                      style={[styles.modelBtn]}
+                      onPress={nextPage}
+                    >
+                      {<Text style={styles.modelBtnText}>Continue</Text>}
+                    </TouchableOpacity>
+                  </View>
+                  
+                </View>
+              </View>
+
+            </Modal>
 
       </SafeAreaView>
     )
  
 }
 export default PageOne
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    
-    },
-    header: {
-        flex:1.6/4,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    headerRight:{
-      backgroundColor: '#00ffff',
-      flex: 1/2,
-      borderTopLeftRadius: 100,
-      borderBottomLeftRadius: 100,
-      borderBottomRightRadius: 100,
-      marginLeft:10,
-      marginBottom: 10,
-      marginRight: -20,
-      marginTop: -20
-    },
-   
-    logo:{
-      backgroundColor: '#00ffff',
-      flex: 1/2,
-      alignSelf: 'center',
-      marginLeft: 15
-    },
-    img: {
-      width: '100%',
-      // height: '100%',
-      resizeMode: 'stretch',
-    },
-
-    // welcome gavel styles
-    welcome: {
-      width:'100%',
-      marginTop: 10,
-      
-    },
-    welcomeText:{
-      fontSize: 30,
-      paddingHorizontal: 20,
-      marginBottom: 30,
-    },
-    info: {
-      marginHorizontal: 20,
-      marginBottom: 30
-    },
-    inputSection:{
-      marginHorizontal: 20,
-      marginBottom: 20,
-      marginTop: 20
-    },
-    input:{
-       
-    },
-    btnSection: {
-      alignItems: 'center',
-      // padding: 20,
-      // backgroundColor: 'red',
-      marginHorizontal:20,
-      marginTop: 20
-    },
-    btn: {
-      alignItems: 'stretch',
-      backgroundColor: 'black',
-      marginHorizontal: 20,
-      paddingVertical: 12,
-      borderRadius: 40,
-      width: '85%',
-
-    },
-    btnText: {
-      color: '#fff',
-      fontSize: 20,
-      alignSelf: 'center'
-    }
-  });
